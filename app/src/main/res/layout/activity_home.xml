@@ -83,6 +83,7 @@
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/coming_soon_movies_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -124,6 +125,7 @@
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/in_theatres_movies_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -207,6 +209,7 @@
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/top_rated_movies_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
