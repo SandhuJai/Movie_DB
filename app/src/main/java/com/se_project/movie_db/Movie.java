@@ -7,14 +7,27 @@ public class Movie {
     private String releaseDate;
     private ArrayList<String> genres;
     private String rating;
+    private String imagePoster;
     // TODO : Add poster, trailer, reviews, comments
 
-
-    public Movie(String title, String releaseDate, ArrayList<String> genres, String rating) {
+    public Movie(String title, String releaseDate, ArrayList<String> genres, String rating, String imagePoster) {
         this.title = title;
         this.releaseDate = releaseDate;
         this.genres = genres;
         this.rating = rating;
+        this.imagePoster = imagePoster;
+    }
+
+    public Movie(String title) {
+        this.title = title;
+    }
+
+    public String getImagePoster() {
+        return imagePoster;
+    }
+
+    public void setImagePoster(String imagePoster) {
+        this.imagePoster = imagePoster;
     }
 
     public String getTitle() {
