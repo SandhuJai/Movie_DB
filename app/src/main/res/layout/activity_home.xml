@@ -72,6 +72,7 @@
                         android:textSize="22sp"/>
 
                     <Button
+                        android:id="@+id/coming_soon_see_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="SEE ALL"
@@ -114,6 +115,7 @@
                         android:textSize="22sp"/>
 
                     <Button
+                        android:id="@+id/in_theatres_see_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="SEE ALL"
@@ -156,6 +158,7 @@
                         android:textSize="22sp"/>
 
                     <Button
+                        android:id="@+id/popular_movies_see_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="SEE ALL"
@@ -198,6 +201,7 @@
                         android:textSize="22sp"/>
 
                     <Button
+                        android:id="@+id/top_rated_see_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="SEE ALL"
