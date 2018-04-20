@@ -18,8 +18,9 @@ public class Movie {
         this.imagePoster = imagePoster;
     }
 
-    public Movie(String title) {
+    public Movie(String title, String url) {
         this.title = title;
+        this.imagePoster = url;
     }
 
     public String getImagePoster() {

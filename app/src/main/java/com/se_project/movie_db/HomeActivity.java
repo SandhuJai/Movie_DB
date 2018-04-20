@@ -157,8 +157,9 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
+                        String url = temp.getString("poster_path");
 
-                        comingSoonMovies.add(new Movie(title));
+                        comingSoonMovies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -221,8 +222,9 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
+                        String url = temp.getString("poster_path");
 
-                        inTheatersMovies.add(new Movie(title));
+                        inTheatersMovies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -285,8 +287,9 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
+                        String url = temp.getString("poster_path");
 
-                        popularMovies.add(new Movie(title));
+                        popularMovies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -349,8 +352,9 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
+                        String url = temp.getString("poster_path");
 
-                        top_rated_Movies.add(new Movie(title));
+                        top_rated_Movies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
