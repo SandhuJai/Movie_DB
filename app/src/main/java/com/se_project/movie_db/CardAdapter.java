@@ -1,5 +1,7 @@
 package com.se_project.movie_db;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,9 +20,11 @@ import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     List<Movie> list;
+    Context context;
 
-    public CardAdapter(List<Movie> list) {
+    public CardAdapter(List<Movie> list, Context context) {
         this.list = list;
+        this.context = context;
     }
 
     @Override
@@ -31,13 +35,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.movie = list.get(position);
         holder.cardtext.setText(holder.movie.getTitle());
+        holder.cardtext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HomeActivity().sendIntent(context, list.get(position));
+            }
+        });
+        holder.cardimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HomeActivity().sendIntent(context, list.get(position));
+            }
+        });
         new DownloadImageTask(holder.cardimage).execute(holder.movie.getImagePoster());
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView cardimage;
         TextView cardtext;
         Movie movie;

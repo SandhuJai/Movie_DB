@@ -3,30 +3,34 @@ package com.se_project.movie_db;
 import java.util.ArrayList;
 
 public class Movie {
+    private String ID;
     private String title;   // title of the Movie
     private String releaseDate;
-    private ArrayList<String> genres;
     private String rating;
     private String imagePoster;
-    // TODO : Add poster, trailer, reviews, comments
+    private String imageWallpaper;
+    // TODO : Add poster, trailer,reviews, comments
 
-    public Movie(String title, String releaseDate, ArrayList<String> genres, String rating, String imagePoster) {
+    public Movie(String ID, String title, String releaseDate, String rating, String imagePoster, String imageWallpaper) {
+        this.ID = ID;
         this.title = title;
         this.releaseDate = releaseDate;
-        this.genres = genres;
         this.rating = rating;
         this.imagePoster = imagePoster;
+        this.imageWallpaper = imageWallpaper;
     }
 
-    public Movie(String title, String url) {
+    public Movie(String title, String url, String ID) {
         this.title = title;
         this.imagePoster = url;
+        this.ID = ID;
     }
 
-    public Movie(String title, String url, String rating) {
+    public Movie(String title, String url, String rating, String ID) {
         this.title = title;
         this.imagePoster = url;
         this.rating = rating;
+        this.ID = ID;
     }
 
     public String getImagePoster() {
@@ -53,19 +57,27 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    public ArrayList<String> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(ArrayList<String> genres) {
-        this.genres = genres;
-    }
-
     public String getRating() {
         return rating;
     }
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public String getImageWallpaper() {
+        return imageWallpaper;
+    }
+
+    public void setImageWallpaper(String imageWallpaper) {
+        this.imageWallpaper = imageWallpaper;
     }
 }

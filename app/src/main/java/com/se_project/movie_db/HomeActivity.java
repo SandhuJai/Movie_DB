@@ -1,12 +1,14 @@
 package com.se_project.movie_db;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -80,6 +82,14 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
         }
         return false;
+    }
+
+    // Sends Intent to MovieDetailsActivity when clicked
+    public void sendIntent(Context context, Movie movie) {
+        if(movie != null) {
+            MovieDetailsActivity.movie = movie;
+            context.startActivity(new Intent(context, MovieDetailsActivity.class));
+        }
     }
 
     @Override
@@ -188,7 +198,7 @@ public class HomeActivity extends AppCompatActivity {
 
             if(shouldStartStop(0)) if(progressDialog.isShowing())  progressDialog.dismiss();
             comingSoonRunning = false;
-            coming_soon_adapter = new CardAdapter(comingSoonMovies);
+            coming_soon_adapter = new CardAdapter(comingSoonMovies, HomeActivity.this);
             coming_soon_recyclerView.setAdapter(coming_soon_adapter);
         }
 
@@ -209,9 +219,13 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
-                        String url = temp.getString("poster_path");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
+                        String rating = temp.getString("vote_average");
+                        String imageWallpaper = "https://image.tmdb.org/t/p/w500" + temp.getString("backdrop_path");
 
-                        comingSoonMovies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
+                        comingSoonMovies.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -252,7 +266,7 @@ public class HomeActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if(shouldStartStop(1)) if(progressDialog.isShowing())  progressDialog.dismiss();
-            in_theatres_adapter = new CardAdapter(inTheatersMovies);
+            in_theatres_adapter = new CardAdapter(inTheatersMovies, HomeActivity.this);
             in_theatres_recyclerView.setAdapter(in_theatres_adapter);
             inTheaterRunning = false;
         }
@@ -274,9 +288,13 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
-                        String url = temp.getString("poster_path");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
+                        String rating = temp.getString("vote_average");
+                        String imageWallpaper = "https://image.tmdb.org/t/p/w500" + temp.getString("backdrop_path");
 
-                        inTheatersMovies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
+                        inTheatersMovies.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -317,7 +335,7 @@ public class HomeActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if(shouldStartStop(2)) if(progressDialog.isShowing())  progressDialog.dismiss();
-            popular_movies_adapter = new CardAdapter(popularMovies);
+            popular_movies_adapter = new CardAdapter(popularMovies, HomeActivity.this);
             popular_movies_recyclerView.setAdapter(popular_movies_adapter);
             popularMoviesRunning = false;
         }
@@ -339,9 +357,13 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
-                        String url = temp.getString("poster_path");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
+                        String rating = temp.getString("vote_average");
+                        String imageWallpaper = "https://image.tmdb.org/t/p/w500" + temp.getString("backdrop_path");
 
-                        popularMovies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
+                        popularMovies.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
@@ -382,7 +404,7 @@ public class HomeActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if(shouldStartStop(3)) if(progressDialog.isShowing())  progressDialog.dismiss();
-            top_rated_movies_adapter = new CardAdapter(top_rated_Movies);
+            top_rated_movies_adapter = new CardAdapter(top_rated_Movies, HomeActivity.this);
             top_rated_movies_recyclerView.setAdapter(top_rated_movies_adapter);
             topRatedRunning = false;
         }
@@ -404,9 +426,13 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
-                        String url = temp.getString("poster_path");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
+                        String rating = temp.getString("vote_average");
+                        String imageWallpaper = "https://image.tmdb.org/t/p/w500" + temp.getString("backdrop_path");
 
-                        top_rated_Movies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
+                        top_rated_Movies.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {

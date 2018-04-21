@@ -1,6 +1,8 @@
 package com.se_project.movie_db;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
-    // TODO: Change List View's Name according to the activity
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -77,6 +78,14 @@ public class ListActivity extends AppCompatActivity {
         new GetList().execute();
     }
 
+    // Sends Intent to MovieDetailsActivity when clicked
+    public void sendIntent(Context context, Movie movie) {
+        if(movie != null) {
+            MovieDetailsActivity.movie = movie;
+            context.startActivity(new Intent(context, MovieDetailsActivity.class));
+        }
+    }
+
     private class GetList extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -95,7 +104,7 @@ public class ListActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if(pageCnt == 1) {
-                adapter = new ListViewCardAdapter(movies);
+                adapter = new ListViewCardAdapter(movies, ListActivity.this);
                 recyclerView.setAdapter(adapter);
             }else {
                 adapter.notifyDataSetChanged();
@@ -123,10 +132,13 @@ public class ListActivity extends AppCompatActivity {
                         JSONObject temp = results.getJSONObject(i);
 
                         String title = temp.getString("original_title");
-                        String url = temp.getString("poster_path");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
                         String rating = temp.getString("vote_average");
+                        String imageWallpaper = "https://image.tmdb.org/t/p/w500" + temp.getString("backdrop_path");
 
-                        movies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url, rating));
+                        movies.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {

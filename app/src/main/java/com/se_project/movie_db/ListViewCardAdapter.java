@@ -1,5 +1,6 @@
 package com.se_project.movie_db;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -17,9 +19,11 @@ import java.util.List;
 
 public class ListViewCardAdapter extends RecyclerView.Adapter<ListViewCardAdapter.ViewHolder>{
     List<Movie> list;
+    Context context;
 
-    public ListViewCardAdapter(List<Movie> movies) {
+    public ListViewCardAdapter(List<Movie> movies, Context context) {
         this.list = movies;
+        this.context = context;
     }
 
     @Override
@@ -30,24 +34,38 @@ public class ListViewCardAdapter extends RecyclerView.Adapter<ListViewCardAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.movie = list.get(position);
         holder.movieName.setText(holder.movie.getTitle());
         holder.rankTextView.setText("#" + (position+1));
         holder.ratingTextView.setText(holder.movie.getRating() + "/10");
+        holder.descriptionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ListActivity().sendIntent(context, list.get(position));
+            }
+        });
+        holder.moviePoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ListActivity().sendIntent(context, list.get(position));
+            }
+        });
         new DownloadImageTask(holder.moviePoster).execute(holder.movie.getImagePoster());
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView moviePoster;
         TextView movieName;
         TextView rankTextView;
         TextView ratingTextView;
+        LinearLayout descriptionBtn;
         Movie movie;
 
         public ViewHolder(View item) {
             super(item);
             moviePoster = item.findViewById(R.id.card_image_poster_view);
+            descriptionBtn = item.findViewById(R.id.list_description_btn);
             movieName = item.findViewById(R.id.list_card_movie_name);
             rankTextView = item.findViewById(R.id.rank_list_text_view);
             ratingTextView = item.findViewById(R.id.rating_text_view);
