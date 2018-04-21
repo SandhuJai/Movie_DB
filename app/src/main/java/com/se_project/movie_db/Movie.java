@@ -23,6 +23,12 @@ public class Movie {
         this.imagePoster = url;
     }
 
+    public Movie(String title, String url, String rating) {
+        this.title = title;
+        this.imagePoster = url;
+        this.rating = rating;
+    }
+
     public String getImagePoster() {
         return imagePoster;
     }

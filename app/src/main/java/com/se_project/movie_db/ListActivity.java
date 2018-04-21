@@ -95,7 +95,7 @@ public class ListActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if(pageCnt == 1) {
-                adapter = new CardAdapter(movies);
+                adapter = new ListViewCardAdapter(movies);
                 recyclerView.setAdapter(adapter);
             }else {
                 adapter.notifyDataSetChanged();
@@ -124,8 +124,9 @@ public class ListActivity extends AppCompatActivity {
 
                         String title = temp.getString("original_title");
                         String url = temp.getString("poster_path");
+                        String rating = temp.getString("vote_average");
 
-                        movies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url));
+                        movies.add(new Movie(title, "https://image.tmdb.org/t/p/w500" + url, rating));
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {

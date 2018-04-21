@@ -13,39 +13,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
+public class ListViewCardAdapter extends RecyclerView.Adapter<ListViewCardAdapter.ViewHolder>{
     List<Movie> list;
 
-    public CardAdapter(List<Movie> list) {
-        this.list = list;
+    public ListViewCardAdapter(List<Movie> movies) {
+        this.list = movies;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view, parent, false);
-        return new ViewHolder(itemView);
+                .inflate(R.layout.layout_card_view, parent, false);
+        return new ListViewCardAdapter.ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.movie = list.get(position);
-        holder.cardtext.setText(holder.movie.getTitle());
-        new DownloadImageTask(holder.cardimage).execute(holder.movie.getImagePoster());
+        holder.movieName.setText(holder.movie.getTitle());
+        holder.rankTextView.setText("#" + (position+1));
+        holder.ratingTextView.setText(holder.movie.getRating() + "/10");
+        new DownloadImageTask(holder.moviePoster).execute(holder.movie.getImagePoster());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView cardimage;
-        TextView cardtext;
+        ImageView moviePoster;
+        TextView movieName;
+        TextView rankTextView;
+        TextView ratingTextView;
         Movie movie;
 
         public ViewHolder(View item) {
             super(item);
-            cardimage = item.findViewById(R.id.cardimage);
-            cardtext = item.findViewById(R.id.cardtext);
+            moviePoster = item.findViewById(R.id.card_image_poster_view);
+            movieName = item.findViewById(R.id.list_card_movie_name);
+            rankTextView = item.findViewById(R.id.rank_list_text_view);
+            ratingTextView = item.findViewById(R.id.rating_text_view);
         }
     }
 
