@@ -25,7 +25,12 @@
             android:name=".ListActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".MovieDetailsActivity"></activity>
+        <activity
+            android:name=".MovieDetailsActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".TemporaryActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

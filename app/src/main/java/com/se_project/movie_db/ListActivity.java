@@ -81,8 +81,8 @@ public class ListActivity extends AppCompatActivity {
     // Sends Intent to MovieDetailsActivity when clicked
     public void sendIntent(Context context, Movie movie) {
         if(movie != null) {
-            MovieDetailsActivity.movie = movie;
-            context.startActivity(new Intent(context, MovieDetailsActivity.class));
+            TemporaryActivity.movie = movie;
+            context.startActivity(new Intent(context, TemporaryActivity.class));
         }
     }
 
