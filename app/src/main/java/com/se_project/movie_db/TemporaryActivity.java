@@ -49,12 +49,12 @@ public class TemporaryActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if(progressDialog.isShowing())  progressDialog.dismiss();
-            MOVIE_ID = links.get(0);
 
             MovieDetailsActivity.MOVIE_ID = MOVIE_ID;
             MovieDetailsActivity.movie = movie;
 
             startActivity(new Intent(TemporaryActivity.this, MovieDetailsActivity.class));
+            finish();
         }
 
         @Override
@@ -72,12 +72,12 @@ public class TemporaryActivity extends AppCompatActivity {
                     // Getting Name
                     JSONArray results = jsonObj.getJSONArray("results");
 
-                    for(int i = 0; i < results.length(); i++) {
+                    for(int i = 0; i < Math.min(1, results.length()); i++) {
                         JSONObject temp = results.getJSONObject(i);
 
                         String link = temp.getString("key");
 
-                        links.add(link);
+                        MOVIE_ID = link;
                     }
                 } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
