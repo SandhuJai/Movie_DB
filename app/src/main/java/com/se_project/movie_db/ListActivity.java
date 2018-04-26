@@ -15,6 +15,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,6 +75,14 @@ public class ListActivity extends AppCompatActivity {
                     searchString = getSearchString(textOnSearchBar);
                     new GetSearchResults().execute();
                 }
+            }
+        });
+        UserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ListActivity.this, WelcomeActivity.class));
+                finish();
             }
         });
 

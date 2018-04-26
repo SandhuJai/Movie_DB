@@ -20,6 +20,7 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -155,6 +156,14 @@ public class MovieDetailsActivity extends YouTubeBaseActivity implements YouTube
                     searchString = getSearchString(textOnSearchBar);
                     new GetSearchResults().execute();
                 }
+            }
+        });
+        UserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MovieDetailsActivity.this, WelcomeActivity.class));
+                finish();
             }
         });
 

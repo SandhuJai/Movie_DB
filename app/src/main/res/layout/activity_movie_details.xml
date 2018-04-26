@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="USER" />
+                    android:text="Log Out" />
             </LinearLayout>
 
             <!-- Youtube Player -->
@@ -133,17 +133,6 @@
                         android:textColor="@android:color/white"
                         android:text="The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the Powerful Thanos before his blitz of devastation and ruin puts and end to the universe."
                         />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="45dp"
-                        android:text="+ Add to wishlist"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@android:color/white"
-                        android:background="@android:color/holo_blue_dark"
-                        android:paddingRight="45dp"/>
-
                 </LinearLayout>
             </LinearLayout>
 

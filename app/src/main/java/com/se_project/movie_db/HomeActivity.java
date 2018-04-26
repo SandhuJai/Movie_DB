@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -127,6 +130,14 @@ public class HomeActivity extends AppCompatActivity {
                     searchString = getSearchString(textOnSearchBar);
                     new GetSearchResults().execute();
                 }
+            }
+        });
+        UserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(HomeActivity.this, WelcomeActivity.class));
+                finish();
             }
         });
 
