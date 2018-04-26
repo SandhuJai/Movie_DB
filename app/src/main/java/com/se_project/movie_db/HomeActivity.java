@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,6 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
+    /*
+    Search Bar Contents
+     */
+    private EditText searchBar;
+    private Button SearchBtn;
+    private String searchString;
+    private Button UserBtn;
+    private ProgressDialog searchResultsLoading;
+    private List<Movie> searchResults;
+
     private RecyclerView coming_soon_recyclerView;
     private RecyclerView.Adapter coming_soon_adapter;
     private RecyclerView.LayoutManager coming_soon_layout_manager;
@@ -96,6 +107,28 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        /*
+        Set Search Bar
+         */
+        searchBar = findViewById(R.id.searchBar_Home);
+        SearchBtn = findViewById(R.id.search_btn_home);
+        UserBtn = findViewById(R.id.user_btn_home);
+        searchResults = new ArrayList<>();
+        SearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String textOnSearchBar = searchBar.getText().toString();
+
+                if(textOnSearchBar == null) {
+                    Toast.makeText(HomeActivity.this, "Please Enter Movie Name", Toast.LENGTH_LONG).show();
+                }else if (textOnSearchBar.equalsIgnoreCase("")) {
+                    Toast.makeText(HomeActivity.this, "Please Enter Movie Name", Toast.LENGTH_LONG).show();
+                }else {
+                    searchString = getSearchString(textOnSearchBar);
+                    new GetSearchResults().execute();
+                }
+            }
+        });
 
         comingSoonMovies = new ArrayList<>();
         coming_soon_recyclerView = findViewById(R.id.coming_soon_movies_recycler_view);
@@ -138,6 +171,118 @@ public class HomeActivity extends AppCompatActivity {
         new GetTopRated().execute();
 
         setSeeAllButtons();
+    }
+
+    private String getSearchString(String text) {
+        StringBuilder returnString = new StringBuilder("");
+
+        for(int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+
+            if(ch == ' ')
+                returnString.append('+');
+            else {
+                int in = (int) ch - 'a';
+
+                if(in >= 0 && in <= 26) {
+                    returnString.append(ch);
+                }else {
+                    in = (int) ch - 'A';
+
+                    if(in >= 0 && in <= 26) {
+                        returnString.append((ch + "").toUpperCase());
+                    }
+                }
+            }
+        }
+
+        return returnString.toString();
+    }
+
+    /*
+    Create class that searches
+     */
+    private class GetSearchResults extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            searchResultsLoading = new ProgressDialog(HomeActivity.this);
+            searchResultsLoading.setMessage("Getting Search Results....");
+            searchResultsLoading.setCancelable(false);
+            searchResultsLoading.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if(searchResultsLoading.isShowing())    searchResultsLoading.dismiss();
+            searchBar.setText("");
+
+            if(searchResults.size() > 0) {
+                sendIntent(HomeActivity.this, searchResults.get(0));
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(HomeActivity.this, "Couldn't find the movie", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+
+            String movieName = searchString;
+
+            String userRequest = "https://api.themoviedb.org/3/search/movie?api_key=5da5237ab7ea9020ac16bcd6e8ffe0ab&query=" + movieName;
+
+            String jsonStr = sh.makeServiceCall(userRequest);
+
+            if(jsonStr != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                    for(int i = 0; i < Math.min(1, jsonArray.length()); i++) {
+                        JSONObject temp = jsonArray.getJSONObject(i);
+
+                        String title = temp.getString("title");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
+                        String rating = temp.getString("vote_average");
+                        String imageWallpaper = "";
+
+                        if(searchResults.size() > 0) {
+                            searchResults.set(0, new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
+                        }else {
+                            searchResults.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Json Parsing Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Couldn't get json from server.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
     }
 
     // Add onClickListeners to all See All Buttons so that clicking them sends Intent to ListActivity

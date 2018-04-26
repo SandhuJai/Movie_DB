@@ -37,12 +37,14 @@
                     android:textColor="@android:color/white" />
 
                 <Button
+                    android:id="@+id/search_btn_List"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="search" />
 
                 <Button
+                    android:id="@+id/user_btn_List"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
