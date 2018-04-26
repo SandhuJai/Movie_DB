@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,12 +44,16 @@ public class MovieDetailsActivity extends YouTubeBaseActivity implements YouTube
     private Button UserBtn;
     private ProgressDialog searchResultsLoading;
     private List<Movie> searchResults;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
 
     // Youtube API key
     public static final String API_KEY = "AIzaSyBVGc2rlkt2e4XMirRjc3EVFxmS1DKR_WE";
     public static String MOVIE_ID;
 
     private ArrayList<String> desc;
+    private ArrayList<Movie> recommendations;
 
     private TextView titleTextView;
     private TextView yearTextView;
@@ -176,9 +182,16 @@ public class MovieDetailsActivity extends YouTubeBaseActivity implements YouTube
         youTubePlayerView = findViewById(R.id.trailerPlayerView);
         youTubePlayerView.initialize(API_KEY, this);
 
+        recommendations = new ArrayList<>();
+        recyclerView = findViewById(R.id.recommended_movies_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
         desc = new ArrayList<>();
 
         new GetDescription().execute();
+        new GetRecommendations().execute();
 
         new DownloadImageTask(posterImageView).execute(movie.getImagePoster());
 
@@ -341,6 +354,70 @@ public class MovieDetailsActivity extends YouTubeBaseActivity implements YouTube
                     desc.add(link);
                 } catch (JSONException e) {
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "JSON parsing error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Couldn't get json from server.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+    }
+
+    private class GetRecommendations extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Log.i("Post", "" + desc.size());
+
+            adapter = new CardAdapter(recommendations, MovieDetailsActivity.this);
+            recyclerView.setAdapter(adapter);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+
+            String request = "https://api.themoviedb.org/3/movie/" + movie.getID() + "/recommendations?api_key=5da5237ab7ea9020ac16bcd6e8ffe0ab&language=en-US&page=1";
+
+            String jsonStr = sh.makeServiceCall(request);
+
+            if(jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting Name
+                    JSONArray results = jsonObj.getJSONArray("results");
+
+                    for(int i = 0; i < results.length(); i++) {
+                        JSONObject temp = results.getJSONObject(i);
+
+                        String title = temp.getString("original_title");
+                        String imagePoster = "https://image.tmdb.org/t/p/w500" + temp.getString("poster_path");
+                        String id = temp.getString("id");
+                        String releaseDate = temp.getString("release_date");
+                        String rating = temp.getString("vote_average");
+                        String imageWallpaper = "https://image.tmdb.org/t/p/w500" + temp.getString("backdrop_path");
+
+                        recommendations.add(new Movie(id, title, releaseDate, rating, imagePoster, imageWallpaper));
+                    }
+                } catch (JSONException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
